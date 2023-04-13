@@ -1,13 +1,19 @@
-# dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-# dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072;
 
-# Invoke-WebRequest -Uri 'https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi' -OutFile 'C:\wsl_update_x64.msi'
-# Start-Process -FilePath 'C:\wsl_update_x64.msi' -Wait
-# Remove-Item -Path "C:\wsl_update_x64.msi"
+dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
 
-# Start-Process wsl.exe "--install -d ubuntu" 
+$arquivo = "${PWD}\wsl_update_x64.msi"
 
-# wsl --update
+Invoke-WebRequest -Uri "https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi" -OutFile $arquivo
+Start-Process -FilePath $arquivo -Wait
+Remove-Item -Path $arquivo
+
+Copy-Item -Path "${PWD}\wslconfig" -Destination "C:\Users\$env:USERNAME\.wslconfig"
+
+wsl --update
+
+Start-Process wsl.exe "--install -d ubuntu" -Wait
 
 wsl sudo apt -y update 
 wsl sudo apt -y upgrade
@@ -18,5 +24,6 @@ wsl sudo apt install -y curl
 wsl sudo apt install -y gnupg
 wsl sudo apt install -y lsb-release
 
-wsl curl -fsSL https://get.docker.com -o get-docker.sh 
 wsl sudo sh ./get-docker.sh
+wsl sudo cp ./wsl.conf /etc/wsl.conf
+wsl --shutdown
