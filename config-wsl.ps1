@@ -27,7 +27,7 @@ $ip_address = wsl hostname -i
 $host_name = "wsldocker"
 Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "$ip_address    $host_name"
 
-powershell.exe .\config-service-wsl.ps1
+powershell.exe .\schedule-wsl.ps1
 powershell.exe .\docker-portainer.ps1
 powershell.exe .\uninstall-docker-desktop.ps1
 
