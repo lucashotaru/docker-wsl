@@ -1,0 +1,1 @@
+wsl sudo service docker start

@@ -2,4 +2,4 @@ $Action = New-ScheduledTaskAction -Execute 'C:\Windows\System32\wsl.exe' -Argume
 $Trigger = New-ScheduledTaskTrigger -AtStartup
 $TaskName = "Run Ubuntu on Startup"
 $Task = New-ScheduledTask -Action $Action -Trigger $Trigger
-Register-ScheduledTask -InputObject $Task
+Register-ScheduledTask -InputObject $Task -TaskName "WSL - Init"
