@@ -23,7 +23,16 @@ wsl sudo cp ./wsl.conf /etc/wsl.conf
 wsl sudo cp ./init.sh /etc/init.sh
 wsl sudo chmod +x /etc/init.sh
 
+wsl apt install net-tools
+
 $ip_address = wsl hostname -i
+
+if ($ip_address -eq "127.0.1.1") {
+    $ip_address = wsl hostname -I
+}
+
+$ip_address = $ip_address.replace('127.0.1.1', '')
+
 $host_name = "wsldocker"
 Add-Content -Path "C:\Windows\System32\drivers\etc\hosts" -Value "$ip_address    $host_name"
 
